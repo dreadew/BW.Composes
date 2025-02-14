@@ -1,0 +1,5 @@
+version: '3.8'
+
+include:
+  - ./rabbitmq/compose.yml
+  - ./pg-users/compose.yml
