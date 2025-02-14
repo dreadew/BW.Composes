@@ -2,4 +2,5 @@ version: '3.8'
 
 include:
   - ./rabbitmq/compose.yml
-  - ./pg-users/compose.yml
+  - ./pg-identity/compose.yml
+  - ./infiscal/compose.yml
