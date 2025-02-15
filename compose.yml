@@ -4,3 +4,4 @@ include:
   - ./rabbitmq/compose.yml
   - ./pg-identity/compose.yml
   - ./infiscal/compose.yml
+  - ./minio/compose.yml
