@@ -1,0 +1,9 @@
+version: "3.8"
+
+include:
+  - ./rabbitmq/compose.yml
+  - ./pg-identity/compose.yml
+  - ./infiscal/compose.yml
+  - ./minio/compose.yml
+  - ./jaeger/compose.yml
+  - ./graylog/compose.yml
