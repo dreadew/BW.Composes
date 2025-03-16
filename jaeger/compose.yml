@@ -3,8 +3,11 @@ version: '3.8'
 services:
   jaeger:
     image: jaegertracing/all-in-one:latest
+    expose:
+      - ${JAEGER_UI_PORT}
+      - ${JAEGER_PORT}
     ports:
-      - "{JAEGER_UI_PORT}:16686"
-      - "{JAEGER_PORT}:6831/udp"
+      - "${JAEGER_UI_PORT}:16686"
+      - "${JAEGER_PORT}:6831/udp"
     environment:
-      - COLLECTOR_ZIPKIN_HTTP_PORT={COLLECTOR_ZIPKIN_HTTP_PORT}
+      - COLLECTOR_ZIPKIN_HTTP_PORT=${COLLECTOR_ZIPKIN_HTTP_PORT}

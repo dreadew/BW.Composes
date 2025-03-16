@@ -3,6 +3,8 @@ version: "3.8"
 include:
   - ./rabbitmq/compose.yml
   - ./pg-identity/compose.yml
+  - ./pg-workspace/compose.yml
+  - ./pg-project/compose.yml
   - ./infiscal/compose.yml
   - ./minio/compose.yml
   - ./jaeger/compose.yml

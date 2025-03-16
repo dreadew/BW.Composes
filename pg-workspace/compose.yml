@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  identity-db:
+  workspace-db:
     image: postgres:latest
-    container_name: identity-db
+    container_name: workspace-db
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT}:5432"
@@ -13,7 +13,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     command: postgres -c hba_file=/custom_pg_hba.conf
     volumes:
-      - postgres_identity_data:/var/lib/postgresql/data
+      - postgres_workspace_data:/var/lib/postgresql/data
       - ./custom_pg_hba.conf:/custom_pg_hba.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -22,4 +22,4 @@ services:
       retries: 3
 
 volumes:
-  postgres_identity_data:
+  postgres_workspace_data:
