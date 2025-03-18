@@ -1,9 +1,22 @@
-version: '3.8'
+version: "3.8"
 
 include:
   - ./rabbitmq/compose.yml
+  - ./kafka/compose.yml
   - ./pg-identity/compose.yml
   - ./pg-workspace/compose.yml
   - ./pg-project/compose.yml
   - ./infiscal/compose.yml
   - ./minio/compose.yml
+
+networks:
+  api_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  data_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

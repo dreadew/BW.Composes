@@ -1,50 +1,78 @@
-version: '3.8'
-
 services:
   graylog:
-    image: graylog/graylog:4.3
-    expose:
-      - ${GRAYLOG_WEB_PORT}
-      - ${GRAYLOG_GELF_PORT}
+    image: graylog/graylog:latest
+    container_name: graylog
+    restart: unless-stopped
     ports:
       - "${GRAYLOG_WEB_PORT}:9000"
       - "${GRAYLOG_GELF_PORT}:12201/udp"
+      - "${GRAYLOG_SYSLOG_PORT}:1514/udp"
     environment:
       - GRAYLOG_PASSWORD_SECRET=${GRAYLOG_PASSWORD_SECRET}
       - GRAYLOG_ROOT_PASSWORD_SHA2=${GRAYLOG_ROOT_PASSWORD_SHA2}
+      - GRAYLOG_HTTP_BIND_ADDRESS=${GRAYLOG_HTTP_BIND_ADDRESS}
       - GRAYLOG_HTTP_EXTERNAL_URI=${GRAYLOG_HTTP_EXTERNAL_URI}
       - GRAYLOG_ELASTICSEARCH_HOSTS=${GRAYLOG_ELASTICSEARCH_HOST}
       - GRAYLOG_MONGODB_URI=${GRAYLOG_MONGODB_URI}
+      - GRAYLOG_CONTENT_PACKS_AUTO_LOAD=${GRAYLOG_CONTENT_PACKS_AUTO_LOAD}
+      - GRAYLOG_CONTENT_PACKS_DIR=${GRAYLOG_CONTENT_PACKS_DIR}
     volumes:
-      - "graylog_data:/usr/share/graylog/data/data"
-      - "graylog_journal:/usr/share/graylog/data/journal"
+      - graylog_data:/usr/share/graylog/data/data
+      - graylog_journal:/usr/share/graylog/data/journal
+      - ./content-packs:/usr/share/graylog/content-packs
+    networks:
+      - data_network
+      - monitoring_network
     depends_on:
       - elasticsearch
       - mongodb
-    restart: "on-failure"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/system/lbstatus"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
     
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:latest
+    container_name: elasticsearch
+    restart: unless-stopped
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - data_network
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - "es_data:/usr/share/elasticsearch/data"
-    restart: "on-failure"
+      - es_elasticsearch_datadata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
   
   mongodb:
     image: mongo:4.4
+    container_name: mongodb
+    restart: unless-stopped
+    networks:
+      - data_network
     volumes:
-      - "mongodb_data:/data/db"
-    restart: "on-failure"
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
 volumes:
   mongodb_data:
-  es_data:
+  elasticsearch_data:
   graylog_data:
   graylog_journal:
