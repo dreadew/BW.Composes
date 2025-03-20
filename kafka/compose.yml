@@ -4,12 +4,10 @@ services:
     container_name: zookeeper
     restart: unless-stopped
     ports:
-      - "${ZOOKEEPER_CLIENT_PORT}:2181"
+      - "${ZOOKEEPER_CLIENT_PORT}:${DEFAULT_ZOOKEEPER_PORT}"
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
       - zookeeper_log:/var/lib/zookeeper/log
-    networks:
-      - data_network
     environment:
       - ZOOKEEPER_CLIENT_PORT=${ZOOKEEPER_CLIENT_PORT}
       - ZOOKEEPER_TICK_TIME=${ZOOKEEPER_TICK_TIME}
@@ -18,18 +16,17 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     restart: unless-stopped
+    hostname: kafka
     ports:
-      - "${KAFKA_PORT}:9092"
+      - "${KAFKA_PORT}:${DEFAULT_KAFKA_PORT}"
     depends_on:
       - zookeeper
     volumes:
       - kafka_data:/var/lib/kafka/data
-    networks:
-      - data_network
     environment:
       - KAFKA_BROKER_ID=${KAFKA_BROKER_ID}
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_CLIENT_PORT}
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:${KAFKA_PORT}
+      - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
+      - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
       - KAFKA_INTER_BROKER_LISTENER_NAME=${KAFKA_INTER_BROKER_LISTENER_NAME}
       - KAFKA_LISTENERS_SECURITY_PROTOCOL_MAP=${KAFKA_LISTENERS_SECURITY_PROTOCOL_MAP}
@@ -43,13 +40,11 @@ services:
     container_name: kafka-ui
     restart: unless-stopped
     ports:
-      - "${KAFKA_UI_PORT}:8080"
+      - "${KAFKA_UI_PORT}:${DEFAULT_KAFKA_UI_PORT}"
     environment:
       - KAFKA_CLUSTERS_0_NAME=${KAFKA_UI_CLUSTERS_0_NAME}
-      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:${KAFKA_PORT}
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:${ZOOKEEPER_CLIENT_PORT}
-    networks:
-      - data_network
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=${KAFKA_UI_CLUSTERS_0_ZOOKEEPER}
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=${KAFKA_UI_CLUSTERS_0_BOOTSTRAPSERVERS}
     links:
       - kafka
       - zookeeper
