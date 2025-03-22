@@ -1,0 +1,39 @@
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    restart: unless-stopped
+    ports:
+      - "${VAULT_PORT}:${DEFAULT_VAULT_PORT}"
+    environment:
+      - VAULT_ADDR=${VAULT_ADDR}
+      - VAULT_LOCAL_CONFIG=${VAULT_LOCAL_CONFIG}
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_DEV_ROOT_TOKEN_ID}
+    depends_on:
+      - consul
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - vault
+    volumes:
+      - vault-data:/vault/data
+      - ./config:/vault/config
+  
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul
+    restart: unless-stopped
+    ports:
+      - "${CONSUL_PORT}:${DEFAULT_CONSUL_PORT}"
+    command: "agent -dev -client=0.0.0.0"
+    networks:
+      - vault
+    volumes:
+      - consul-data:/consul/data
+
+networks:
+  vault:
+
+volumes:
+  vault-data:
+  consul-data:
