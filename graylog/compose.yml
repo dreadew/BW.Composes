@@ -1,6 +1,6 @@
 services:
   graylog:
-    image: graylog/graylog:latest
+    image: graylog/graylog:6.1.8
     container_name: graylog
     restart: unless-stopped
     ports:
@@ -34,7 +34,7 @@ services:
       start_period: 90s
     
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:latest
+    image: bitnami/elasticsearch:7.17.6
     container_name: elasticsearch
     restart: unless-stopped
     environment:
@@ -48,7 +48,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - es_elasticsearch_datadata:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
       interval: 30s
@@ -57,7 +57,7 @@ services:
       start_period: 40s
   
   mongodb:
-    image: mongo:4.4
+    image: mongo:latest
     container_name: mongodb
     restart: unless-stopped
     networks:
@@ -65,7 +65,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 3
