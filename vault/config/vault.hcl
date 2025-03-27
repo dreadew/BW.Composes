@@ -4,9 +4,9 @@ storage "consul" {
 }
 
 listener "tcp" {
-  address       = "0.0.0.0:8400"
+  address       = "0.0.0.0:8525"
   tls_disable   = 1  # Отключаем TLS (для тестов, в продакшене нужен HTTPS)
 }
 
-api_addr = "http://0.0.0.0:8400"
+api_addr = "http://0.0.0.0:8525"
 ui       = true
