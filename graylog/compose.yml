@@ -57,7 +57,7 @@ services:
       start_period: 40s
   
   mongodb:
-    image: mongo:latest
+    image: mongo:5.0.0
     container_name: mongodb
     restart: unless-stopped
     networks:
