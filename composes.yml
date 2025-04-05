@@ -4,7 +4,6 @@ include:
   - ./pg-identity/compose.yml
   - ./pg-workspace/compose.yml
   - ./pg-project/compose.yml
-  - ./infiscal/compose.yml
   - ./vault/compose.yml
   - ./minio/compose.yml
 
@@ -18,4 +17,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.21.0.0/16
+        - subnet: 172.30.0.0/16

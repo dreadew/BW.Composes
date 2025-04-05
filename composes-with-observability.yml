@@ -4,7 +4,6 @@ include:
   - ./pg-identity/compose.yml
   - ./pg-workspace/compose.yml
   - ./pg-project/compose.yml
-  - ./infiscal/compose.yml
   - ./vault/compose.yml
   - ./minio/compose.yml
   - ./jaeger/compose.yml
