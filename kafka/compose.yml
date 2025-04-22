@@ -18,12 +18,15 @@ services:
     restart: unless-stopped
     hostname: kafka
     ports:
+      - "9092:9092"
       - "${KAFKA_PORT}:${DEFAULT_KAFKA_PORT}"
     depends_on:
       - zookeeper
     volumes:
       - kafka_data:/var/lib/kafka/data
     environment:
+      - KAFKA_LISTENERS=${KAFKA_LISTENERS}
+      - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
       - KAFKA_BROKER_ID=${KAFKA_BROKER_ID}
       - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
       - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
@@ -34,6 +37,7 @@ services:
       - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=${KAFKA_TRANSACTION_STATE_LOG_MIN_ISR}
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=${KAFKA_AUTO_CREATE_TOPICS_ENABLE}
       - KAFKA_LOG_RETENTION_HOURS=${KAFKA_LOG_RETENTION_HOURS}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
