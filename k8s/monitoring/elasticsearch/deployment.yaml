@@ -14,20 +14,20 @@ spec:
         app: elasticsearch
     spec:
       containers:
-      - name: elasticsearch
-        image: bitnami/elasticsearch:7.17.6
-        ports:
-        - containerPort: 9200
-        env:
-        - name: discovery.type
-          value: "single-node"
-        - name: xpack.security.enabled
-          value: "false"
-        - name: ES_JAVA_OPTS
-          value: "-Xms512m -Xmx512m"
-        volumeMounts:
-        - name: elasticsearch-data
-          mountPath: /usr/share/elasticsearch/data
+        - name: elasticsearch
+          image: bitnami/elasticsearch:7.17.6
+          ports:
+            - containerPort: 9200
+          env:
+            - name: discovery.type
+              value: "single-node"
+            - name: xpack.security.enabled
+              value: "false"
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+          volumeMounts:
+            - name: elasticsearch-data
+              mountPath: /usr/share/elasticsearch/data
       volumes:
         - name: elasticsearch-data
           persistentVolumeClaim:

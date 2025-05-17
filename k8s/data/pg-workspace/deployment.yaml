@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: workspace-db
-  namespace: postgres
+  namespace: data
 spec:
   replicas: 1
   selector:
@@ -14,29 +14,36 @@ spec:
         app: workspace-db
     spec:
       containers:
-      - name: workspace-db
-        image: postgres:latest
-        ports:
-          - containerPort: 5434
-        env:
-          - name: POSTGRES_DB
-            valueFrom:
-              secretKeyRef:
-                name: pg-workspace-secrets
-                key: POSTGRES_DB
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: pg-workspace-secrets
-                key: POSTGRES_USER
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pg-workspace-secrets
-                key: POSTGRES_PASSWORD
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: postgres-workspace-data
-          - mountPath: /custom_pg_hba.conf
+        - name: workspace-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5434
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: pg-workspace-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pg-workspace-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-workspace-secrets
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-workspace-data
+            - mountPath: /custom_pg_hba.conf
+              name: custom-pg-hba
+              subPath: custom_pg_hba.conf
+      volumes:
+        - name: postgres-workspace-data
+          persistentVolumeClaim:
+            claimName: pg-workspace-pvc
+        - name: custom-pg-hba
+          configMap:
             name: custom-pg-hba
-            subPath: custom_pg_hba.conf

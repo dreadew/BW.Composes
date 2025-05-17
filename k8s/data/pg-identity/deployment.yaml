@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: identity-db
-  namespace: postgres
+  namespace: data
 spec:
   replicas: 1
   selector:
@@ -14,29 +14,36 @@ spec:
         app: identity-db
     spec:
       containers:
-      - name: identity-db
-        image: postgres:latest
-        ports:
-          - containerPort: 5433
-        env:
-          - name: POSTGRES_DB
-            valueFrom:
-              secretKeyRef:
-                name: pg-identity-secrets
-                key: POSTGRES_DB
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: pg-identity-secrets
-                key: POSTGRES_USER
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pg-identity-secrets
-                key: POSTGRES_PASSWORD
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: postgres-identity-data
-          - mountPath: /custom_pg_hba.conf
+        - name: identity-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5433
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: pg-identity-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pg-identity-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-identity-secrets
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-identity-data
+            - mountPath: /custom_pg_hba.conf
+              name: custom-pg-hba
+              subPath: custom_pg_hba.conf
+      volumes:
+        - name: postgres-identity-data
+          persistentVolumeClaim:
+            claimName: pg-identity-pvc
+        - name: custom-pg-hba
+          configMap:
             name: custom-pg-hba
-            subPath: custom_pg_hba.conf

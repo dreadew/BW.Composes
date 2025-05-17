@@ -14,28 +14,32 @@ spec:
         app: minio
     spec:
       containers:
-      - name: minio
-        image: minio/minio:latest
-        ports:
-          - containerPort: 9000
-          - containerPort: 9001
-        env:
-          - name: MINIO_ROOT_USER
-            valueFrom:
-              secretKeyRef:
-                name: minio-secrets
-                key: MINIO_ROOT_USER
-          - name: MINIO_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: minio-secrets
-                key: MINIO_ROOT_PASSWORD
-          - name: MINIO_ENDPOINT
-            value: "http://localhost:9001"
-          - name: MINIO_IDENTITYSERVICE_BUCKET
-            value: "identityservice"
-          - name: MINIO_REGION
-            value: "us-east-1"
-        volumeMounts:
-          - mountPath: /data
-            name: minio-data
+        - name: minio
+          image: minio/minio:latest
+          ports:
+            - containerPort: 9000
+            - containerPort: 9001
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_USER
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_PASSWORD
+            - name: MINIO_ENDPOINT
+              value: "http://localhost:9001"
+            - name: MINIO_IDENTITYSERVICE_BUCKET
+              value: "identityservice"
+            - name: MINIO_REGION
+              value: "us-east-1"
+          volumeMounts:
+            - mountPath: /data
+              name: minio-data
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: minio-pvc

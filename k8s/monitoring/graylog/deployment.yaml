@@ -14,38 +14,38 @@ spec:
         app: graylog
     spec:
       containers:
-      - name: graylog
-        image: graylog/graylog:6.1.8
-        ports:
-        - containerPort: 9000
-        env:
-        - name: GRAYLOG_PASSWORD_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: graylog-secrets
-              key: password_secret
-        - name: GRAYLOG_ROOT_PASSWORD_SHA2
-          valueFrom:
-            secretKeyRef:
-              name: graylog-secrets
-              key: root_password_sha2
-        - name: GRAYLOG_HTTP_BIND_ADDRESS
-          value: 0.0.0.0:9000
-        - name: GRAYLOG_HTTP_EXTERNAL_URI
-          value: http://localhost:9000/
-        - name: GRAYLOG_ELASTICSEARCH_HOSTS
-          value: http://elasticsearch:9200
-        - name: GRAYLOG_MONGODB_URI
-          value: mongodb://mongodb:27017/graylog
-        - name: GRAYLOG_CONTENT_PACKS_AUTO_LOAD
-          value: gelf-tcp-input.json
-        - name: GRAYLOG_CONTENT_PACKS_DIR
-          value: /usr/share/graylog/content-packs
-        volumeMounts:
-        - name: graylog-data
-          mountPath: /usr/share/graylog/data/data
-        - name: graylog-journal
-          mountPath: /usr/share/graylog/data/journal
+        - name: graylog
+          image: graylog/graylog:6.1.8
+          ports:
+            - containerPort: 9000
+          env:
+            - name: GRAYLOG_PASSWORD_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: graylog-secrets
+                  key: password_secret
+            - name: GRAYLOG_ROOT_PASSWORD_SHA2
+              valueFrom:
+                secretKeyRef:
+                  name: graylog-secrets
+                  key: root_password_sha2
+            - name: GRAYLOG_HTTP_BIND_ADDRESS
+              value: 0.0.0.0:9000
+            - name: GRAYLOG_HTTP_EXTERNAL_URI
+              value: http://localhost:9000/
+            - name: GRAYLOG_ELASTICSEARCH_HOSTS
+              value: http://elasticsearch:9200
+            - name: GRAYLOG_MONGODB_URI
+              value: mongodb://mongodb:27017/graylog
+            - name: GRAYLOG_CONTENT_PACKS_AUTO_LOAD
+              value: gelf-tcp-input.json
+            - name: GRAYLOG_CONTENT_PACKS_DIR
+              value: /usr/share/graylog/content-packs
+          volumeMounts:
+            - name: graylog-data
+              mountPath: /usr/share/graylog/data/data
+            - name: graylog-journal
+              mountPath: /usr/share/graylog/data/journal
       volumes:
         - name: graylog-data
           persistentVolumeClaim:
