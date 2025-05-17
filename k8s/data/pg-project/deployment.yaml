@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-db
+  namespace: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-db
+  template:
+    metadata:
+      labels:
+        app: project-db
+    spec:
+      containers:
+      - name: project-db
+        image: postgres:latest
+        ports:
+          - containerPort: 5435
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: pg-project-secrets
+                key: POSTGRES_DB
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pg-project-secrets
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-project-secrets
+                key: POSTGRES_PASSWORD
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-project-data
+          - mountPath: /custom_pg_hba.conf
+            name: custom-pg-hba
+            subPath: custom_pg_hba.conf

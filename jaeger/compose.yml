@@ -1,6 +1,6 @@
 services:
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/jaeger:2.5.0
     container_name: jaeger
     restart: unless-stopped
     ports:

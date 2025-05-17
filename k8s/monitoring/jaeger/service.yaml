@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  namespace: monitoring
+spec:
+  ports:
+    - port: 16686
+      targetPort: 16686
+      nodePort: 16686
+    - port: 6831
+      targetPort: 6831
+      nodePort: 6831
+    - port: 5775
+      targetPort: 5775
+      nodePort: 5775
+    - port: 6832
+      targetPort: 6832
+      nodePort: 6832
+    - port: 14268
+      targetPort: 14268
+      nodePort: 14268
+    - port: 14250
+      targetPort: 14250
+      nodePort: 14250
+    - port: 9411
+      targetPort: 9411
+      nodePort: 9411
+  selector:
+    app: jaeger
