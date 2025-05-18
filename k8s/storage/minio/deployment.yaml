@@ -36,6 +36,13 @@ spec:
               value: "identityservice"
             - name: MINIO_REGION
               value: "us-east-1"
+          command:
+            - minio
+          args:
+            - server
+            - /data
+            - --console-address
+            - ":9001"
           volumeMounts:
             - mountPath: /data
               name: minio-data

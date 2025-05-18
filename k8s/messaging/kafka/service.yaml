@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka
+  name: kafka-container
   namespace: messaging
 spec:
   type: NodePort
@@ -14,4 +14,4 @@ spec:
       targetPort: 29092
       nodePort: 30120
   selector:
-    app: kafka
+    app: kafka-container

@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: custom-pg-hba
-  namespace: data
-data:
-  custom_pg_hba.conf: |
-    host    all             all             0.0.0.0/0              trust

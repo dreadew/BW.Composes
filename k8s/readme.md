@@ -61,4 +61,19 @@ curl -sfL https://get.k3s.io | K3S_URL="https://MASTER_IP:6443" K3S_TOKEN="TOKEN
 - Хранилище секретов (32000 - 32010)
 - S3-хранилища (32050 - 32060)
 
+# Установка vault
+
+`helm install vault hashicorp/vault -n secrets`
+
+Проверка: `kubectl get pods -n secrets`
+
+Инициализация: `kubectl exec -n secrets -it vault-0 -- vault operator init`
+
+Unseal:
+```
+kubectl exec -n secrets -it vault-0 -- vault operator unseal <ключ_1>
+kubectl exec -n secrets -it vault-0 -- vault operator unseal <ключ_2>
+kubectl exec -n secrets -it vault-0 -- vault operator unseal <ключ_3>
+```
+
 TODO: Добавление CI

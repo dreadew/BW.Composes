@@ -28,6 +28,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: kafka
+                name: kafka-container
                 port:
                   number: 29092

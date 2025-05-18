@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka
+  name: kafka-container
   namespace: messaging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafka
+      app: kafka-container
   template:
     metadata:
       labels:
-        app: kafka
+        app: kafka-container
     spec:
       containers:
-        - name: kafka
+        - name: kafka-container
           image: confluentinc/cp-kafka:latest
           ports:
             - containerPort: 9092
