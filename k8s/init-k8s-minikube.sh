@@ -57,6 +57,11 @@ for NAMESPACE in "${NAMESPACES[@]}"; do
   kubectl create namespace $NAMESPACE
 done
 
+kubectl apply -R -f data
+kubectl apply -R -f messaging
+kubectl apply -R -f monitoring
+kubectl apply -R -f storage
+
 if ! command -v helm &> /dev/null; then
   echo "Helm not found, installing..."
   curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
