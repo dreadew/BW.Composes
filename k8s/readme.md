@@ -53,4 +53,12 @@ curl -sfL https://get.k3s.io | K3S_URL="https://MASTER_IP:6443" K3S_TOKEN="TOKEN
 1) Определяем внешний IP (EXTERNAL-IP) worker-нод `kubectl get nodes -o wide`
 2) В файле `/etc/hosts` необходимо указать таблицу маршрутов по каждому лейблу (data, messaging, mointoring, secrets, storage)
 
+# Дефолтное распределение NodePort's:
+
+- Базы данных для сервисов (30100 - 30110)
+- Брокеры сообщений (30120 - 30130)
+- Мониторинг (31110 - 31150)
+- Хранилище секретов (32000 - 32010)
+- S3-хранилища (32050 - 32060)
+
 TODO: Добавление CI

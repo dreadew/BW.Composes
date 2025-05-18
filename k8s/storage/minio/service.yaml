@@ -4,12 +4,15 @@ metadata:
   name: minio
   namespace: storage
 spec:
+  type: NodePort
   ports:
     - name: api
       port: 9001
       targetPort: 9001
+      nodePort: 32050
     - name: ui
       port: 9002
       targetPort: 9002
+      nodePort: 32051
   selector:
     app: minio

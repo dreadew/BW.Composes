@@ -4,8 +4,10 @@ metadata:
   name: workspace-db
   namespace: data
 spec:
+  type: NodePort
   ports:
     - port: 5434
       targetPort: 5434
+      nodePort: 30102
   selector:
     app: workspace-db

@@ -4,12 +4,15 @@ metadata:
   name: rabbitmq
   namespace: messaging
 spec:
+  type: NodePort
   ports:
     - name: api
       port: 5672
       targetPort: 5672
+      nodePort: 30121
     - name: management-ui
       port: 15672
       targetPort: 15672
+      nodePort: 30122
   selector:
     app: rabbitmq

@@ -4,15 +4,19 @@ metadata:
   name: graylog
   namespace: monitoring
 spec:
+  type: NodePort
   ports:
     - name: web-ui
       port: 9000
       targetPort: 9000
+      nodePort: 31110
     - name: gelf
       port: 12201
       targetPort: 12201
+      nodePort: 31111
     - name: syslog
       port: 1514
       targetPort: 1514
+      nodePort: 31112
   selector:
     app: graylog

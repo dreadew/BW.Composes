@@ -35,6 +35,8 @@ sudo systemctl start docker
 minikube start --driver=docker
 echo "Minikube started successfully."
 
+sudo minikube tunnel
+
 minikube addons enable ingress
 echo "Ingress plugin installed successfully."
 

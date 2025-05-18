@@ -4,6 +4,7 @@ metadata:
   name: kafka
   namespace: messaging
 spec:
+  type: NodePort
   ports:
     - name: kafka-internal
       port: 9092
@@ -11,5 +12,6 @@ spec:
     - name: kafka-external
       port: 29092
       targetPort: 29092
+      nodePort: 30120
   selector:
     app: kafka

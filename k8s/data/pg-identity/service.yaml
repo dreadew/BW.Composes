@@ -4,8 +4,10 @@ metadata:
   name: identity-db
   namespace: data
 spec:
+  type: NodePort
   ports:
     - port: 5433
       targetPort: 5433
+      nodePort: 30100
   selector:
     app: identity-db
