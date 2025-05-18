@@ -44,3 +44,21 @@ kubectl wait --namespace ingress-nginx \
   --for=condition=Ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=180s
+
+NAMESPACES=(
+  messaging
+  data
+  monitoring
+  secrets
+  storage
+)
+
+for NAMESPACE in "${NAMESPACES[@]}"; do
+  kubectl create namespace $NAMESPACE
+done
+
+if ! command -v helm &> /dev/null; then
+  echo "Helm not found, installing..."
+  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  echo "Helm installed successfully."
+fi

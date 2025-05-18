@@ -4,7 +4,6 @@ HOSTNAMES=(
     messaging.local
     data.local
     monitoring.local
-    secrets.local
     storage.local
 )
 
