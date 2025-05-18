@@ -76,4 +76,63 @@ kubectl exec -n secrets -it vault-0 -- vault operator unseal <ключ_2>
 kubectl exec -n secrets -it vault-0 -- vault operator unseal <ключ_3>
 ```
 
+# Аутентификация в сервисах через Keycloak
+
+1. Установка NuGet-пакета: `dotnet add package Microsoft.AspNetCore.Authentication.OpenIdConnect`
+2. Добавить код в Program.cs:
+2.1. Если еще нет схемы аутентификации:
+```
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "Cookies";
+        options.DefaultChallengeScheme = "oidc";
+    })
+    .AddCookie("Cookies")
+    .AddOpenIdConnect("oidc", options =>
+    {
+        options.Authority = "http://keycloak:8080/realms/local-realm";
+        options.ClientId = "aspnet-core-client";
+        options.ClientSecret = "CLIENT_SECRET";
+        options.ResponseType = "code";
+
+        options.SaveTokens = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
+    });
+```
+2.2. Если уже используется аутентифицкация через JWT Bearer:
+```
+services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "Bearer";
+        options.DefaultChallengeScheme = "Bearer";
+    })
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "myissuer"
+            ValidAudience = "myaudience"
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretKey"))
+        };
+    })
+    .AddJwtBearer("Keycloak", options =>
+    {
+        options.Authority = "https://<keycloak-server>/realms/local-realm";
+        options.Audience = "clientId";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = "https://<keycloak-server>/realms/local-realm",
+            ValidateAudience = true,
+            ValidAudience = "clientId",
+            ValidateLifetime = true,
+            RequireExpirationTime = true
+        };
+    });
+
+```
+
 TODO: Добавление CI

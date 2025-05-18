@@ -7,15 +7,16 @@ services:
       - "${VAULT_PORT}:${DEFAULT_VAULT_PORT}"
     environment:
       - VAULT_ADDR=${VAULT_ADDR}
-      - VAULT_LOCAL_CONFIG=${VAULT_LOCAL_CONFIG}
-      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_DEV_ROOT_TOKEN_ID}
     depends_on:
       - consul
     volumes:
+      - ./vault-config.hcl:/vault-config.hcl
+      - ./vault-init.sh:/vault-init.sh
       - vault-data:/data
     cap_add:
       - IPC_LOCK
-  
+    command: [ "sh", "-c", "chmod +x /vault-init.sh && /vault-init.sh" ]
+
   consul:
     image: hashicorp/consul:latest
     container_name: consul

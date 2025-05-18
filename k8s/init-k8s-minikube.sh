@@ -46,6 +46,7 @@ kubectl wait --namespace ingress-nginx \
   --timeout=180s
 
 NAMESPACES=(
+  authorization
   messaging
   data
   monitoring
