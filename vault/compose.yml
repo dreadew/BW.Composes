@@ -11,11 +11,12 @@ services:
       - consul
     volumes:
       - ./vault-config.hcl:/vault-config.hcl
-      - ./vault-init.sh:/vault-init.sh
+      - ./vault-config-init.sh:/vault-config-init.sh
       - vault-data:/data
     cap_add:
       - IPC_LOCK
-    command: [ "sh", "-c", "chmod +x /vault-init.sh && /vault-init.sh" ]
+    command: |
+      sh -c '/vault-config-init.sh'
 
   consul:
     image: hashicorp/consul:latest
