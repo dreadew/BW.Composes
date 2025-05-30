@@ -5,8 +5,6 @@ services:
     restart: unless-stopped
     ports:
       - "${VAULT_PORT}:${DEFAULT_VAULT_PORT}"
-    environment:
-      - VAULT_ADDR=${VAULT_ADDR}
     depends_on:
       - consul
     volumes:
@@ -15,8 +13,13 @@ services:
       - vault-data:/data
     cap_add:
       - IPC_LOCK
-    command: |
-      sh -c '/vault-config-init.sh'
+    environment:
+      - VAULT_ADDR=${VAULT_ADDR}
+      - VAULT_ADDRESS=${VAULT_ADDRESS}
+      - VAULT_SKIP_VERIFY=true
+    command: vault server -config /vault-config.hcl
+    # command: |
+      # sh -c '/vault-config-init.sh'
 
   consul:
     image: hashicorp/consul:latest
