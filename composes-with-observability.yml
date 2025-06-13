@@ -14,14 +14,14 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.60.0.0/16
   data_network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.30.0.0/16
+        - subnet: 172.70.0.0/16
   monitoring_network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.40.0.0/16
+        - subnet: 172.80.0.0/16

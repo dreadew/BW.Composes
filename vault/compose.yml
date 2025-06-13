@@ -28,6 +28,8 @@ services:
     ports:
       - "${CONSUL_PORT}:${DEFAULT_CONSUL_PORT}"
     command: "agent -dev -client=0.0.0.0"
+    volumes:
+      - consul-data:/consul/data
 
 volumes:
   vault-data:
